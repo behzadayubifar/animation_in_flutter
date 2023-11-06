@@ -1,21 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'pages/animated_container_page.dart';
-import 'pages/animated_opacity_page.dart';
-import 'pages/tween_animation_builder_page.dart';
-
-enum AnimationExample {
-  animatedContainer,
-  animatedOpacity,
-  tweenAnimationBuilder,
-}
-
-extension on AnimationExample {
-  String capitalizeFirstCharacter() {
-    final name = describeEnum(this);
-    return name.replaceRange(0, 1, name.characters.first.toUpperCase());
-  }
-}
+import 'package:flutter/services.dart';
+import 'package:animtaions_ba/ui/stopwatch.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,48 +10,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      themeMode: ThemeMode.dark,
-      darkTheme: ThemeData.dark(),
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
       ),
-      home: Scaffold(
-        appBar: AppBar(title: Text('Animations Playground')),
-        body: AnimationExamplesList(),
-      ),
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case 'animatedContainer':
-            return MaterialPageRoute(builder: (_) => AnimatedContainerPage());
-          case 'animatedOpacity':
-            return MaterialPageRoute(builder: (_) => AnimatedOpacityPage());
-          case 'tweenAnimationBuilder':
-            return MaterialPageRoute(
-                builder: (_) => TweenAnimationBuilderPage());
-          default:
-            throw UnimplementedError('Route ${settings.name} not implemented');
-        }
-      },
+      home: MyHomePage(),
     );
   }
 }
 
-class AnimationExamplesList extends StatelessWidget {
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final example = AnimationExample.values[index];
-        final routeName = describeEnum(example);
-        return ListTile(
-          title: Text(example.capitalizeFirstCharacter()),
-          trailing: Icon(Icons.chevron_right),
-          onTap: () => Navigator.of(context).pushNamed(routeName),
-        );
-      },
-      itemCount: AnimationExample.values.length,
+    return const AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(32.0),
+            child: AspectRatio(
+              aspectRatio: .85,
+              child: Stopwatch(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
